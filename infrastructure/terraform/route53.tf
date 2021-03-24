@@ -4,11 +4,11 @@ resource "aws_route53_zone" "root" {
 
 data "aws_route53_zone" "webapp_root" {
   provider = aws.infra_webapp
-  zone_id = ""
+  name = "app.${aws_route53_zone.root.name}"
 }
 
 resource "aws_route53_record" "root_webapp_subdomain" {
-  name = "webapp"
+  name = "app"
   type = "NS"
   zone_id = aws_route53_zone.root.id
   records = [
