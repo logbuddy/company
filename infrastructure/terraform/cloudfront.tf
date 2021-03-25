@@ -1,7 +1,7 @@
 resource "aws_cloudfront_distribution" "website" {
   enabled  = true
 
-  aliases = [aws_route53_zone.root.name]
+  aliases = [aws_route53_zone.root.name, "www.${aws_route53_zone.root.name}"]
 
   default_cache_behavior {
     allowed_methods        = ["GET", "HEAD", "OPTIONS"]
@@ -21,8 +21,22 @@ resource "aws_cloudfront_distribution" "website" {
   price_class = "PriceClass_All"
 
   origin {
-    domain_name = aws_s3_bucket.website.bucket_domain_name
+    #http://herodot-infra-company-prod-website.s3-website-us-west-1.amazonaws.com/
+    domain_name = "${aws_s3_bucket.website.id}.s3-website-${aws_s3_bucket.website.region}.amazonaws.com"
     origin_id   = "S3-${aws_s3_bucket.website.id}"
+
+    custom_origin_config {
+      http_port                = 80
+      https_port               = 443
+      origin_keepalive_timeout = 5
+      origin_protocol_policy   = "http-only"
+      origin_read_timeout      = 30
+      origin_ssl_protocols     = [
+        "TLSv1",
+        "TLSv1.1",
+        "TLSv1.2",
+      ]
+    }
   }
 
   restrictions {

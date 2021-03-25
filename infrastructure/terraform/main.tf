@@ -6,6 +6,14 @@ provider "aws" {
 }
 
 provider "aws" {
+  alias = "us_east_1"
+  assume_role {
+    role_arn = "arn:aws:iam::${lookup(var.workspace_to_infra_company_aws_account_id, terraform.workspace)}:role/AccountManager"
+  }
+  region = "us-east-1"
+}
+
+provider "aws" {
   alias = "infra_webapp"
   assume_role {
     role_arn = "arn:aws:iam::${lookup(var.workspace_to_infra_webapp_aws_account_id, terraform.workspace)}:role/AccountManager"

@@ -1,4 +1,19 @@
 resource "aws_s3_bucket" "website" {
   bucket = "herodot-infra-company-${lookup(var.workspace_to_stage, terraform.workspace)}-website"
   force_destroy = "false"
+  website {
+    index_document = "index.html"
+    error_document = "error.html"
+  }
+  acl = "public-read"
+}
+
+resource "aws_s3_bucket_object" "website_content" {
+  for_each = fileset("../../src", "*.html")
+  bucket = aws_s3_bucket.website.id
+  key = each.value
+  source = "../../src/${each.value}"
+  etag = filemd5("../../src/${each.value}")
+  content_type = "text/html"
+  acl = "public-read"
 }
