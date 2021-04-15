@@ -25,7 +25,7 @@ resource "aws_route53_record" "root_cloudfront_alias_www" {
 }
 
 
-data "aws_route53_zone" "webapp_root" {
+data "aws_route53_zone" "infra_webapp_prod_subdomain" {
   provider = aws.infra_webapp
   name = "app.${aws_route53_zone.root.name}"
 }
@@ -35,15 +35,15 @@ data "aws_route53_zone" "webapp_root" {
 # where the Route53 zone app.logbuddy.io is defined and whose NS records we reference here.
 # When building the infrastructure from scratch, you therefore need to first terraform
 # https://github.com/logbuddy/webapp/blob/main/infrastructure/terraform/bootstrap, and then this project.
-resource "aws_route53_record" "root_webapp_subdomain" {
-  name = "${data.aws_route53_zone.webapp_root.name}."
+resource "aws_route53_record" "infra_webapp_prod_subdomain" {
+  name = "${data.aws_route53_zone.infra_webapp_prod_subdomain.name}."
   type = "NS"
   zone_id = aws_route53_zone.root.id
   ttl = 900
   records = [
-    data.aws_route53_zone.webapp_root.name_servers[0],
-    data.aws_route53_zone.webapp_root.name_servers[1],
-    data.aws_route53_zone.webapp_root.name_servers[2],
-    data.aws_route53_zone.webapp_root.name_servers[3],
+    data.aws_route53_zone.infra_webapp_prod_subdomain.name_servers[0],
+    data.aws_route53_zone.infra_webapp_prod_subdomain.name_servers[1],
+    data.aws_route53_zone.infra_webapp_prod_subdomain.name_servers[2],
+    data.aws_route53_zone.infra_webapp_prod_subdomain.name_servers[3],
   ]
 }

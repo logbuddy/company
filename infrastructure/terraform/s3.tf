@@ -2,8 +2,7 @@ resource "aws_s3_bucket" "website" {
   bucket = "herodot-infra-company-${lookup(var.workspace_to_stage, terraform.workspace)}-website"
   force_destroy = "false"
   website {
-    index_document = "index.html"
-    error_document = "error.html"
+    redirect_all_requests_to = "https://app.logbuddy.io"
   }
   acl = "public-read"
 }
