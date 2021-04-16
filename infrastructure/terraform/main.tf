@@ -1,6 +1,6 @@
 provider "aws" {
   assume_role {
-    role_arn = "arn:aws:iam::${lookup(var.workspace_to_infra_company_aws_account_id, terraform.workspace)}:role/AccountManager"
+    role_arn = "arn:aws:iam::${var.infra_company_aws_account_id}:role/AccountManager"
   }
   region = "us-west-1"
 }
@@ -8,15 +8,23 @@ provider "aws" {
 provider "aws" {
   alias = "us_east_1"
   assume_role {
-    role_arn = "arn:aws:iam::${lookup(var.workspace_to_infra_company_aws_account_id, terraform.workspace)}:role/AccountManager"
+    role_arn = "arn:aws:iam::${var.infra_company_aws_account_id}:role/AccountManager"
   }
   region = "us-east-1"
 }
 
 provider "aws" {
-  alias = "infra_webapp"
+  alias = "infra_webapp_preprod"
   assume_role {
-    role_arn = "arn:aws:iam::${lookup(var.workspace_to_infra_webapp_aws_account_id, terraform.workspace)}:role/AccountManager"
+    role_arn = "arn:aws:iam::${var.infra_webapp_preprod_aws_account_id}:role/AccountManager"
+  }
+  region = "us-west-1"
+}
+
+provider "aws" {
+  alias = "infra_webapp_prod"
+  assume_role {
+    role_arn = "arn:aws:iam::${var.infra_webapp_prod_aws_account_id}:role/AccountManager"
   }
   region = "us-west-1"
 }

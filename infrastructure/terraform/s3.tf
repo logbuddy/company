@@ -1,5 +1,5 @@
 resource "aws_s3_bucket" "website" {
-  bucket = "herodot-infra-company-${lookup(var.workspace_to_stage, terraform.workspace)}-website"
+  bucket = "herodot-infra-company-prod-website"
   force_destroy = "false"
   website {
     redirect_all_requests_to = "https://app.logbuddy.io"

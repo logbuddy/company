@@ -1,5 +1,5 @@
 resource "aws_route53_zone" "root" {
-  name = lookup(var.workspace_to_root_domain, terraform.workspace)
+  name = var.root_domain
 }
 
 resource "aws_route53_record" "root_cloudfront_alias" {
@@ -26,7 +26,7 @@ resource "aws_route53_record" "root_cloudfront_alias_www" {
 
 
 data "aws_route53_zone" "infra_webapp_prod_subdomain" {
-  provider = aws.infra_webapp
+  provider = aws.infra_webapp_prod
   name = "app.${aws_route53_zone.root.name}"
 }
 
@@ -50,15 +50,15 @@ resource "aws_route53_record" "infra_webapp_prod_subdomain" {
 
 
 data "aws_route53_zone" "infra_webapp_preprod_subdomain" {
-  provider = aws.infra_webapp
+  provider = aws.infra_webapp_preprod
   name = "preprod.app.${aws_route53_zone.root.name}"
 }
 
-# This delegates app.logbuddy.io to the Route53 zone app.logbuddy.io in account herodot-infra-webapp-preprod.
+# This delegates preprod.app.logbuddy.io to the Route53 zone preprod.app.logbuddy.io in account herodot-infra-webapp-preprod.
 # Therefore, this terraform depends on https://github.com/logbuddy/webapp/blob/main/infrastructure/terraform/bootstrap/route53.tf,
 # where the Route53 zone preprod.app.logbuddy.io is defined and whose NS records we reference here.
 # When building the infrastructure from scratch, you therefore need to first terraform
-# https://github.com/logbuddy/webapp/blob/main/infrastructure/terraform/bootstrap, and then this project.
+# https://github.com/logbuddy/webapp/blob/main/infrastructure/terraform/bootstrap in workspace preprod, and then this project.
 resource "aws_route53_record" "infra_webapp_preprod_subdomain" {
   name = "${data.aws_route53_zone.infra_webapp_preprod_subdomain.name}."
   type = "NS"

@@ -1,31 +1,19 @@
-variable "workspace_to_stage" {
-  type = map(string)
-  default = {
-    default = "prod"
-    preprod = "preprod"
-  }
+variable "infra_company_aws_account_id" {
+  type = string
+  default = "829748688443"
 }
 
-variable "workspace_to_infra_company_aws_account_id" {
-  type = map(string)
-  default = {
-    default = "829748688443"
-    preprod = "000000000000"
-  }
+variable "infra_webapp_preprod_aws_account_id" {
+  type = string
+  default = "619527075300"
 }
 
-variable "workspace_to_infra_webapp_aws_account_id" {
-  type = map(string)
-  default = {
-    default = "230024871185"
-    preprod = "000000000000"
-  }
+variable "infra_webapp_prod_aws_account_id" {
+  type = string
+  default = "230024871185"
 }
 
-variable "workspace_to_root_domain" {
-  type = map(string)
-  default = {
-    default = "logbuddy.io"
-    preprod = ""
-  }
+variable "root_domain" {
+  type = string
+  default = "logbuddy.io"
 }
